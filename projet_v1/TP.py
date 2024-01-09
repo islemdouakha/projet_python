@@ -1,11 +1,12 @@
 # Correction de G. Poux-Médard, 2021-2022
 
-# =============== PARTIE 1 =============
-# =============== 1.1 : REDDIT ===============
-# Library
+
+
+
+
 import praw
 
-# Fonction affichage hiérarchie dict
+
 def showDictStruct(d):
     def recursivePrint(d, i):
         for k in d:
@@ -16,20 +17,21 @@ def showDictStruct(d):
                 print("-"*i, k, ":", d[k])
     recursivePrint(d, 1)
 
-# Identification
+
 reddit = praw.Reddit(client_id='MPNtLJFi9WDhqwoXyQH_TA', client_secret='-XsL7-l14Rwq8bznow2k59wuz3K40w', user_agent='test')
 
-# Requête
+
 limit = 100
 hot_posts = reddit.subreddit('all').hot(limit=limit)#.top("all", limit=limit)#
 
-# Récupération du texte
+
 docs = []
 docs_bruts = []
 afficher_cles = False
 for i, post in enumerate(hot_posts):
-    # if i%10==0: print("Reddit:", i, "/", limit)
-    if afficher_cles:  # Pour connaître les différentes variables et leur contenu
+
+    if afficher_cles:  
+
         for k, v in post.__dict__.items():
             pass
             print(k, ":", v)
@@ -40,50 +42,49 @@ for i, post in enumerate(hot_posts):
     docs.append(post.selftext.replace("\n", " "))
     docs_bruts.append(("Reddit", post))
 
-#print(docs)
 
-# =============== 1.2 : ArXiv ===============
-# Libraries
+
+
+
 import urllib, urllib.request, _collections
 import xmltodict
 
-# Paramètres
+
 query_terms = ["clustering", "Dirichlet"]
 max_results = 50
 
-# Requête
+
 url = f'http://export.arxiv.org/api/query?search_query=all:{"+".join(query_terms)}&start=0&max_results={max_results}'
 data = urllib.request.urlopen(url)
 
-# Format dict (OrderedDict)
+
 data = xmltodict.parse(data.read().decode('utf-8'))
 
-#showDictStruct(data)
 
-# Ajout résumés à la liste
+
+
 for i, entry in enumerate(data["feed"]["entry"]):
-    # if i%10==0: print("ArXiv:", i, "/", limit)
+
     docs.append(entry["summary"].replace("\n", ""))
     docs_bruts.append(("ArXiv", entry))
-    #showDictStruct(entry)
 
-# =============== 1.3 : Exploitation ===============
-# print(f"# docs avec doublons : {len(docs)}")
+
+
 docs = list(set(docs))
-# print(f"# docs sans doublons : {len(docs)}")
+
 
 for i, doc in enumerate(docs):
-    # print(f"Document {i}\t# caractères : {len(doc)}\t# mots : {len(doc.split(' '))}\t# phrases : {len(doc.split('.'))}")
+
     if len(doc)<100:
         docs.remove(doc)
 
 longueChaineDeCaracteres = " ".join(docs)
 
-# =============== PARTIE 2 =============
-# =============== 2.1, 2.2 : CLASSE DOCUMENT ===============
+
+
 from Classes import Document, RedditDocument, ArxivDocument
 
-# =============== 2.3 : MANIPS ===============
+
 import datetime
 collection = []
 for nature, doc in docs_bruts:
@@ -150,27 +151,19 @@ for doc in collection:
 
 
 
-# =============== 2.9 : SAUVEGARDE ===============
+
 import pickle
 
-# Ouverture d'un fichier, puis écriture avec pickle
+
 with open("corpus.pkl", "wb") as f:
     pickle.dump(corpus, f)
 
-# Supression de la variable "corpus"
+
 del corpus
 
-# Ouverture du fichier, puis lecture avec pickle
+
 with open("corpus.pkl", "rb") as f:
     corpus = pickle.load(f)
 
-# La variable est réapparue
+
 print(corpus)
-
-
-
-
-
-
-
-
