@@ -1,4 +1,5 @@
 import regex as re
+
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -8,7 +9,7 @@ class Singleton(type):
 
 from Classes import Author
 import pandas as pd
-from Collections import Counter
+from collections import Counter
 from scipy.sparse import csr_matrix
 
 
@@ -65,7 +66,7 @@ class Corpus(metaclass=Singleton):
     def search(self, mot, contexte=30):
         self.concatener_texte()
         
-        matches = re.findall(rf"\b{mot}\b", self.longueChaineDeCaracteres, re.IGNORECASE)
+        matches = list(re.finditer(rf"\b{mot}\b", self.longueChaineDeCaracteres, re.IGNORECASE))
 
         print(f"{mot} a été trouvé {len(matches)} fois dans le corpus.")
         
