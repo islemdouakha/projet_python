@@ -1,3 +1,4 @@
+import regex as re
 class Singleton(type):
     _instances = {}
     def __call__(cls, *args, **kwargs):
@@ -16,6 +17,7 @@ class Corpus(metaclass=Singleton):
         self.id2doc = {}
         self.ndoc = 0
         self.naut = 0
+        self.longueChaineDeCaracteres = None
 
     def add(self, doc):
         for aut in doc.auteur:
@@ -44,6 +46,18 @@ class Corpus(metaclass=Singleton):
 
         return "\n".join(list(map(str, docs)))
 
+    def concatener_texte(self):
+        if self.longueChaineDeCaracteres is None:
+            self.longueChaineDeCaracteres = " ".join([doc.texte for doc in self.id2doc.values()])
 
-
+    def get_longue_chaine_de_caracteres(self):
+        self.concatener_texte()
+        return self.longueChaineDeCaracteres
+    
+    def search(self, mot):
+        self.concatener_texte()
+        matches = re.findall(rf"\b{mot}\b", self.longueChaineDeCaracteres, re.IGNORECASE)
+        print(f"{mot} a été trouvé {len(matches)} fois dans le corpus.")
+        for match in matches:
+            print(match)
 

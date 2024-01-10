@@ -1,4 +1,3 @@
-# Correction de G. Poux-Médard, 2021-2022
 
 
 
