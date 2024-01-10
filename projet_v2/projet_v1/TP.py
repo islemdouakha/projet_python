@@ -164,6 +164,6 @@ with open("corpus.pkl", "rb") as f:
     corpus = pickle.load(f)
 
 
-print("Entre le mot à rechercher :")
+print("Entrez le mot à rechercher :")
 mot = input()
 corpus.search(mot)
