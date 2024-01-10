@@ -18,12 +18,13 @@ class Corpus(metaclass=Singleton):
         self.naut = 0
 
     def add(self, doc):
-        if doc.auteur not in self.aut2id:
-            self.naut += 1
-            self.authors[self.naut] = Author(doc.auteur)
-            self.aut2id[doc.auteur] = self.naut
-        self.authors[self.aut2id[doc.auteur]].add(doc.texte)
-
+        for aut in doc.auteur:
+            if aut not in self.aut2id:
+                self.naut += 1
+                self.authors[self.naut] = Author(aut)
+                self.aut2id[aut] = self.naut
+            self.authors[self.aut2id[aut]].add(doc.texte)
+        
         self.ndoc += 1
         self.id2doc[self.ndoc] = doc
 

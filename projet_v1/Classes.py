@@ -3,7 +3,7 @@
 
 class Document:
 
-    def __init__(self, titre="", auteur="", date="", url="", texte="",type=""):
+    def __init__(self, titre, auteur, date, url, texte,type):
         self.titre = titre
         self.auteur = auteur
         self.date = date
@@ -37,7 +37,7 @@ class Author:
         return f"Auteur : {self.name}\t# productions : {self.ndoc}"
 
 class RedditDocument(Document):
-    def __init__(self, titre="", auteur="", date="", url="", texte="", nbcmnts="",type=""):
+    def __init__(self, titre, auteur, date, url, texte, nbcmnts,type=""):
         super().__init__( titre, auteur, date, url, texte,type)
         self.nbcmnts = nbcmnts
 
@@ -54,7 +54,7 @@ class RedditDocument(Document):
 
 class ArxivDocument(Document):
 
-    def __init__(self, titre="", date="", auteur="", url="", texte="",type=""):
+    def __init__(self, titre, date, auteur, url, texte,type=""):
         super().__init__(titre,auteur,date, url, texte,type)
         self.auteur = auteur.split(',')
         

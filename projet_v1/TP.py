@@ -97,9 +97,8 @@ for nature, doc in docs_bruts:
             authors = doc["author"]["name"]  # Si l'auteur est seul, pas besoin de liste
         summary = doc["summary"].replace("\n", "")  # On enlève les retours à la ligne
         date = datetime.datetime.strptime(doc["published"], "%Y-%m-%dT%H:%M:%SZ").strftime("%Y/%m/%d")  # Formatage de la date en année/mois/jour avec librairie datetime
-
-        doc_classe = ArxivDocument(titre, date, summary, doc["id"])
-        doc_classe.set_auteurs(authors)
+        texte = doc["id"]
+        doc_classe = ArxivDocument(titre, date,authors, texte,summary)
         doc_classe.type = doc_classe.getType()
 
 
@@ -111,7 +110,7 @@ for nature, doc in docs_bruts:
         auteur = str(doc.author)
         date = datetime.datetime.fromtimestamp(doc.created).strftime("%Y/%m/%d")
         url = "https://www.reddit.com/"+doc.permalink
-        texte = doc.selftext.replace("\n", "")
+        texte = doc.selftext
         nbcmnts = doc.num_comments
 
         doc_classe = RedditDocument(titre, auteur, date, url, texte, nbcmnts)
